@@ -10,6 +10,7 @@ func AuthRoutes(app *fiber.App, api fiber.Router) {
 	auth := api.Group("/auth")
 	auth.Get("/restore", service.Restore)
 	auth.Post("/login", service.Login)
+	auth.Post("/signup", service.Signup)
 	auth.Delete("/logout", service.Logout)
 
 	// return 404 for all other api routes

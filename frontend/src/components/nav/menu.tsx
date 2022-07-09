@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { login, logout } from "../../redux/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function NavMenu() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const user = useAppSelector(state => state.auth.user);
@@ -53,22 +56,25 @@ export default function NavMenu() {
         <>
           {!user ? (
             <>
-              <div data-testid="signup-button" className="menu-item">
+              <div onClick={() => navigate('/login')} data-testid="signup-button" className="menu-item">
+                Log In
+              </div>
+              <div onClick={() => navigate('/signup')} data-testid="signup-button" className="menu-item">
                 Sign Up
               </div>
               <div
                 data-testid="login-button"
-                onClick={() =>
+                onClick={() => {
                   dispatch(
                     login({
-                      email: "sd.cotter45@gmail.com",
+                      email: "demo@demo.com",
                       password: "password",
                     })
-                  )
-                }
+                  ).then(() => navigate('/'));
+                }}
                 className="menu-item"
               >
-                Sign In
+                Demo
               </div>
             </>
           ) : (

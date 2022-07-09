@@ -155,6 +155,65 @@ func Login(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"status": "success", "message": "Success login", "data": safeUser})
 }
 
+// Signup create user, return cookie and user
+func Signup(c *fiber.Ctx) error {
+	user := new(model.User)
+
+	if err := c.BodyParser(&user); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Error on signup request", "data": err})
+	}
+
+	email := user.Email
+	pass := user.Password
+
+	if err := database.DB.Where(&model.User{Email: email}).First(&model.User{}).Error; err == nil {
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"status": "error", "message": "User already exists", "data": nil})
+	}
+
+	hash, err := HashPassword(pass)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Couln't hash password", "data": err})
+	}
+
+	user.Password = hash
+	if err := database.DB.Create(&user).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error on signup request", "data": err})
+	}
+
+	expirationTime := time.Now().Add(1 * time.Hour)
+
+	claims := &Claims{
+		Email: user.Email,
+		UserID: user.ID,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expirationTime.Unix(),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error on login request", "data": err})
+	}
+
+	c.Cookie(&fiber.Cookie{
+		Expires: expirationTime,
+		Path:    "/",
+		Secure:  false,
+		HTTPOnly: true,
+		Value:  tokenString,
+		Name:    "token",
+	})
+
+	safeUser := SafeUser{
+		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+	}
+
+	return c.JSON(fiber.Map{"status": "success", "message": "Success login", "data": safeUser})
+}
+
 // Logout delete cookie
 func Logout(c *fiber.Ctx) error {
 	cookie := new(fiber.Cookie)

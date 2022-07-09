@@ -1,18 +1,22 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { login } from "../../redux/auth/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
 
-import './login.css';
+import './auth.css';
 
 function Login() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(login({email, password}));
+    await dispatch(login({email, password}));
+    navigate('/');
   }
 
   return (
@@ -42,6 +46,9 @@ function Login() {
           />
         </label>
         <button type="submit" className="form-button">Login</button>
+        <Link to="/signup" className="link">
+          Sign Up
+        </Link>
       </form>
     </main>
   )

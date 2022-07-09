@@ -5,6 +5,8 @@ import (
 	"go_api/routes"
 	"go_api/config"
 	"log"
+	"os"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -20,7 +22,12 @@ func main() {
 	}
 
 	database.ConnectDB()
-
 	routes.SetupRoutes(app)
-	log.Fatal(app.Listen(":8000"))
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
+	log.Fatal(app.Listen(fmt.Sprint(":", port)))
 }
