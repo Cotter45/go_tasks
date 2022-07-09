@@ -22,6 +22,7 @@ function App() {
         <Nav />
       </header>
       {status === 'loading' && <Loading />}
+      {/* {user && <Navigate to="/" />} */}
       <Router />
     </>
   );

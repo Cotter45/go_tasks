@@ -1,6 +1,8 @@
 FROM node:16-alpine as build-node 
 WORKDIR /frontend
 COPY frontend/ .
+ENV REACT_APP_BASE_URL=https://go-tasks-api.herokuapp.com
+RUN npm install
 RUN npm run build
 
 FROM golang:alpine as build 
@@ -15,11 +17,4 @@ RUN go build -o /main
 FROM alpine 
 COPY --from=build-node /frontend/build ./frontend/build
 COPY --from=build /main /main
-# ENV DB_HOST=host.docker.internal
-# ENV DB_PORT=8080
-# ENV DB_USER=postgres
-# ENV DB_PASSWORD=postgres
-# ENV DB_NAME=go_api
-# ENV SECRET=super_serial_secret
-# ENV ENVIRONMENT=production
 ENTRYPOINT ["/main"]
