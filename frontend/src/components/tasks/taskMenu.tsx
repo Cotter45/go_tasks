@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-function TaskMenu({ activeTask }: { activeTask: number | undefined }) {
+function TaskMenu() {
 
   return (
     <div className="task-menu">

@@ -62,19 +62,19 @@ func UpdateTask(c *fiber.Ctx) error {
 
 // DeleteTask delete task
 func DeleteTask(c *fiber.Ctx) error {
-	userID := c.Params("userID")
-	taskID := c.Params("taskID")
+	taskID := c.Params("id")
 
 	db := database.DB
 	var task model.Task
 
-	db.Where("user_id = ? AND id = ?", userID, taskID).Find(&task)
+	db.Where("id = ?", taskID).Find(&task)
 
 	if task.Title == "" {
 		return c.Status(404).JSON(fiber.Map{"status": "error", "message": "No task found with ID", "data": nil})
 	}
 
+	taskCopy := task
 	db.Delete(&task)
 	
-	return c.JSON(fiber.Map{"status": "success", "message": "Task successfully deleted", "data": nil})
+	return c.JSON(fiber.Map{"status": "success", "message": "Task successfully deleted", "data": taskCopy})
 }

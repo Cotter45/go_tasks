@@ -23,10 +23,10 @@ function NewTask() {
       completed: false
     };
 
-    await dispatch(createTask(task));
+    const response = await dispatch(createTask(task));
     setTitle('');
     setDescription('');
-    navigate('/');
+    navigate(`/${response.payload.ID}`, { state: { task: response.payload } });
   }
 
   return (

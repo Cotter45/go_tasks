@@ -47,6 +47,17 @@ export const updateTask = createAsyncThunk(
   },
 );
 
+export const deleteTask = createAsyncThunk(
+  "tasks/deleteTask",
+  async (task: Partial<Task>) => {
+    const response = await authFetch(`/api/tasks/${task.ID}`, {
+      method: "DELETE",
+    });
+    const data = await response.json();
+    return data.data;
+  },
+);
+
 export const taskSlice = createSlice({
   name: "task",
   initialState,
@@ -74,6 +85,14 @@ export const taskSlice = createSlice({
       state.tasks = tasks.map((task) => (task.ID === action.payload.ID ? action.payload : task));
       state.status = "idle";
     }).addCase(updateTask.rejected, (state) => {
+      state.status = "failed";
+    }).addCase(deleteTask.pending, (state) => {
+      state.status = "loading";
+    }).addCase(deleteTask.fulfilled, (state, action) => {
+      const tasks = current(state).tasks;
+      state.tasks = tasks.filter((task) => task.ID !== action.payload.ID);
+      state.status = "idle";
+    }).addCase(deleteTask.rejected, (state) => {
       state.status = "failed";
     })
   },
