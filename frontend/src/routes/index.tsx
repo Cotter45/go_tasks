@@ -7,7 +7,7 @@ import { User } from "../redux/models";
 import Tasks from "../components/tasks";
 import NewTask from "../components/tasks/new";
 import Profile from "../components/tasks/profile";
-import Task from "../components/tasks/task";
+import CurrentTask from "../components/tasks/task";
 
 function Router({ user }: { user: User | undefined }) {
   return (
@@ -18,7 +18,7 @@ function Router({ user }: { user: User | undefined }) {
       <Route element={<AuthRoutes user={user} />}>
         <Route path="/" element={<Tasks />}>
           <Route path="/new" element={<NewTask />} />
-          <Route path="/:id" element={<Task />} />
+          <Route path="/:id" element={<CurrentTask />} />
           <Route path="/" element={<Profile user={user} />} />
         </Route>
       </Route>

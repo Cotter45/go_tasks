@@ -26,7 +26,7 @@ function NewTask() {
     const response = await dispatch(createTask(task));
     setTitle('');
     setDescription('');
-    navigate(`/${response.payload.ID}`, { state: { task: response.payload } });
+    navigate(`/${response.payload.ID}`, { state: { task: response.payload, replace: true } });
   }
 
   return (

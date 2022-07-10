@@ -1,22 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../redux/hooks";
+import { Task } from "../../redux/models";
 import { deleteTask, updateTask } from "../../redux/taskSlice";
 
-function Task() {
+function CurrentTask() {
   const state = useLocation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const locationState: any = state.state;
-  const task = locationState.task;
+  const stateTask = locationState.task;
 
+  const [task, setTask] = useState<Task>();
   const [edit, setEdit] = useState(false);
-  const [title, setTitle] = useState(task.title);
-  const [description, setDescription] = useState(task.description);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!task) return;
     const newTask = { 
       ...task,
       title: edit ? title : task.title,
@@ -30,10 +33,19 @@ function Task() {
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!task) return;
     await dispatch(deleteTask(task));
     navigate("/");
   }
 
+  useEffect(() => {
+    if (!stateTask) return;
+    setTask(stateTask);
+    setTitle(stateTask.title);
+    setDescription(stateTask.description);
+  }, [stateTask]);
+
+  if (!task) return null;
   return (
     <div className="task">
       <div className="login-form">
@@ -93,4 +105,4 @@ function Task() {
   );
 }
 
-export default Task;
+export default CurrentTask;
