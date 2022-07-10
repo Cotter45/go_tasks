@@ -8,11 +8,10 @@ import (
 )
 
 func TaskRoutes(app *fiber.App, api fiber.Router) {
-	task := api.Group("/task")
+	task := api.Group("/tasks")
 	task.Use("*", middleware.Protected)
-	task.Get("/:id", service.GetTask)
-	task.Get("/", service.GetAllTasks)
-	task.Post("/", service.CreateTask)
+	task.Get("/:user_id", service.GetAllTasks)
+	task.Post("/:user_id", service.CreateTask)
 	task.Patch("/:id", service.UpdateTask)
 	task.Delete("/:id", service.DeleteTask)
 

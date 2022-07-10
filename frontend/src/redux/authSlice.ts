@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { authFetch } from '../authFetch';
-import { RootState, AppThunk } from '../store';
+import { authFetch } from './authFetch';
+import { RootState, AppThunk } from './store';
 
-import type { User } from '../models';
+import type { User } from './models';
 
-export interface SessionState {
+export interface AuthState {
   user: User | undefined;
   status: 'idle' | 'loading' | 'failed';
 }
 
-const initialState: SessionState = {
+const initialState: AuthState = {
   user: undefined,
   status: 'idle',
 };
@@ -61,7 +61,7 @@ export const restore = (): AppThunk => async (dispatch) => {
 };
 
 export const authSlice = createSlice({
-  name: 'session',
+  name: 'auth',
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {

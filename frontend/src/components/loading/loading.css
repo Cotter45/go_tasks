@@ -1,8 +1,9 @@
 .wrap {
-  position: relative;
-  top: 150px;
-  width: 75px;
-  margin: 0 auto;
+  position: absolute;
+  top: 40%;
+  left: 45%;
+  width: 150px;
+  margin: auto;
   z-index: 10;
 }
 
@@ -113,7 +114,7 @@
 .text {
   position: absolute;
   top: 95px;
-  left: 8px;
+  left: -10px;
   font-family: Arial, Helvetica, sans-serif;
   text-transform: uppercase;
   color: #888;

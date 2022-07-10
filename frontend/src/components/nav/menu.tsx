@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { login, logout } from "../../redux/auth/authSlice";
+import { login, logout } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function NavMenu() {

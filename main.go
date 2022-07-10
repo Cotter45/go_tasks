@@ -11,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 func main() {
@@ -20,6 +21,7 @@ func main() {
 		app.Use(cors.New())
 		app.Use(logger.New())
 	}
+	app.Use(recover.New())
 
 	database.ConnectDB()
 	routes.SetupRoutes(app)

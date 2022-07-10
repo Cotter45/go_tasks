@@ -1,0 +1,62 @@
+.task-page {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
+
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid gray;
+  overflow-y: auto;
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.task-menu {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid gray;
+  padding-right: 15px;
+}
+
+.icon {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: rgb(100, 154, 151);
+}
+
+.task {
+  height: 90%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  border-bottom: 1px solid gray;
+}

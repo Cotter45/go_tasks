@@ -1,16 +1,10 @@
-import { useAppSelector } from "../redux/hooks";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
+import { User } from "../redux/models";
 
-function AuthRoutes() {
-  const navigate = useNavigate();
-  const user = useAppSelector(state => state.auth.user);
+function AuthRoutes({ user }: { user: User | undefined }) {
 
-  if (!user) navigate('/login');
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  if (!user) return <Navigate to="/login" />;
+  return <Outlet />;
 }
 
 export default AuthRoutes;

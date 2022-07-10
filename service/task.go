@@ -10,7 +10,7 @@ import (
 
 // GetAllTasks query all tasks by userID
 func GetAllTasks(c *fiber.Ctx) error {
-	userID := c.Params("userID")
+	userID := c.Params("user_id")
 
 	db := database.DB
 	var tasks []model.Task
@@ -20,26 +20,9 @@ func GetAllTasks(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"status": "success", "message": "All tasks", "data": tasks})
 }
 
-// GetTask query task
-func GetTask(c *fiber.Ctx) error {
-	userID := c.Params("userID")
-	taskID := c.Params("taskID")
-
-	db := database.DB
-	var task model.Task
-
-	db.Where("user_id = ? AND id = ?", userID, taskID).Find(&task)
-
-	if task.Title == "" {
-		return c.Status(404).JSON(fiber.Map{"status": "error", "message": "No task found with ID", "data": nil})
-	}
-
-	return c.JSON(fiber.Map{"status": "success", "message": "Task found", "data": task})
-}
-
 // CreateTask new task
 func CreateTask(c *fiber.Ctx) error {
-	userID := c.Params("userID")
+	userID := c.Params("user_id")
 	userIDInt, _ := strconv.Atoi(userID)
 
 	db := database.DB
@@ -50,7 +33,6 @@ func CreateTask(c *fiber.Ctx) error {
 	}
 
 	task.UserID = userIDInt
-
 	db.Create(&task)
 
 	return c.JSON(fiber.Map{"status": "success", "message": "Created task", "data": task})
@@ -58,19 +40,18 @@ func CreateTask(c *fiber.Ctx) error {
 
 // UpdateTask update task
 func UpdateTask(c *fiber.Ctx) error {
-	userID := c.Params("userID")
-	taskID := c.Params("taskID")
+	taskID := c.Params("id")
 
 	db := database.DB
 	var task model.Task
 
-	db.Where("user_id = ? AND id = ?", userID, taskID).Find(&task)
+	db.Where("id = ?", taskID).Find(&task)
 
 	if task.Title == "" {
-		return c.Status(404).JSON(fiber.Map{"status": "error", "message": "No task found with ID", "data": nil})
+		return c.Status(404).JSON(fiber.Map{"status": "error", "message": "Task not found", "data": nil})
 	}
 
-	if err := c.BodyParser(task); err != nil {
+	if err := c.BodyParser(&task); err != nil {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Couldn't update task", "data": err})
 	}
 

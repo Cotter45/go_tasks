@@ -8,7 +8,9 @@ export interface User {
 export interface Task {
   title: string;
   description: string;
-  id: number;
-  userId: number;
+  ID: number;
+  user_id: number;
   completed: boolean;
+  CreatedAt: Date;
+  UpdatedAt: Date;
 }

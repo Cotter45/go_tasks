@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import Loading from './components/loading/loading';
 import Nav from './components/nav';
-import { restore } from './redux/auth/authSlice';
+import { restore } from './redux/authSlice';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import Router from './routes';
 
@@ -22,8 +22,7 @@ function App() {
         <Nav />
       </header>
       {status === 'loading' && <Loading />}
-      {/* {user && <Navigate to="/" />} */}
-      <Router />
+      <Router user={user} />
     </>
   );
 }

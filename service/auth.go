@@ -77,6 +77,33 @@ func Restore(c *fiber.Ctx) error {
 		Email:    user.Email,
 	}
 
+
+	expirationTime := time.Now().Add(1 * time.Hour)
+
+	newClaims := &Claims{
+		Email: safeUser.Email,
+		UserID: safeUser.ID,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expirationTime.Unix(),
+		},
+	}
+
+	newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, newClaims)
+	tokenString, err := newToken.SignedString(jwtKey)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error on login request", "data": err})
+	}
+
+	c.Cookie(&fiber.Cookie{
+		Expires: expirationTime,
+		Path:    "/",
+		Secure:  false,
+		HTTPOnly: true,
+		Value:  tokenString,
+		Name:    "token",
+	})
+
+
 	return c.JSON(fiber.Map{"status": "success", "message": "User found", "data": safeUser})
 }
 
